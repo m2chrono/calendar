@@ -22,7 +22,7 @@
       min-height: 100vh;
     }
     .calendar-wrapper {
-      max-width: 1050px;
+      max-width: 1100px;
       width: 100%;
       background: #fffcf7;
       border-radius: 24px;
@@ -30,7 +30,6 @@
       padding: 16px 14px 20px;
       border: 1px solid #edd9c6;
     }
-    /* Заголовок */
     .calendar-header {
       display: flex;
       justify-content: space-between;
@@ -81,7 +80,7 @@
       cursor: pointer;
       font-weight: bold;
       color: #5d3c25;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -101,17 +100,17 @@
       text-align: center;
       color: #37281a;
     }
-    /* Легенда */
     .legend {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px 12px;
+      gap: 6px 10px;
       margin: 8px 0 14px;
-      font-size: clamp(0.65rem, 2vw, 0.85rem);
+      font-size: clamp(0.6rem, 1.8vw, 0.78rem);
       background: #fcf3ea;
       padding: 8px 12px;
       border-radius: 16px;
       align-items: center;
+      line-height: 1.3;
     }
     .legend-item {
       display: flex;
@@ -119,18 +118,48 @@
       gap: 4px;
     }
     .subject-dot {
-      width: 12px;
-      height: 12px;
+      width: 10px;
+      height: 10px;
       border-radius: 3px;
       display: inline-block;
       flex-shrink: 0;
     }
-    .dot-math { background: #e5986c; }
-    .dot-reading { background: #7fa07a; }
-    .dot-russian { background: #b2956e; }
-    .dot-music1 { background: #c78bb3; }
-    .dot-music2 { background: #8b9dc3; }
-    /* Таблица */
+    .dot-math {
+      background: #e5986c;
+    }
+    .dot-russian {
+      background: #b2956e;
+    }
+    .dot-reading {
+      background: #7fa07a;
+    }
+    .dot-mult {
+      background: #f0c040;
+    }
+    .dot-piano {
+      background: #c78bb3;
+    }
+    .dot-logic {
+      background: #8b9dc3;
+    }
+    .dot-project {
+      background: #e07b7b;
+    }
+    .dot-essay {
+      background: #6ba8a8;
+    }
+    .dot-poem {
+      background: #b8a06e;
+    }
+    .dot-nature {
+      background: #6b8c5c;
+    }
+    .legend-separator {
+      width: 1px;
+      height: 16px;
+      background: #d8c4ad;
+      margin: 0 4px;
+    }
     .table-container {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
@@ -139,19 +168,19 @@
     }
     .calendar-table {
       width: 100%;
-      min-width: 600px;
+      min-width: 650px;
       border-collapse: collapse;
       background: white;
       border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
       table-layout: fixed;
     }
     .calendar-table th {
       background: #fae6d5;
       color: #4d3320;
       font-weight: 700;
-      font-size: clamp(0.7rem, 2vw, 0.9rem);
+      font-size: clamp(0.7rem, 2vw, 0.85rem);
       padding: 8px 2px;
       text-align: center;
       border: 1px solid #ecd9c2;
@@ -159,8 +188,8 @@
     .calendar-table td {
       border: 1px solid #ecd9c2;
       vertical-align: top;
-      height: clamp(70px, 14vw, 100px);
-      padding: 4px 3px;
+      height: clamp(100px, 16vw, 120px);
+      padding: 5px 4px;
       background: #ffffff;
     }
     .calendar-table td.weekend-col {
@@ -169,7 +198,7 @@
       text-align: center;
       vertical-align: middle;
       font-weight: 500;
-      font-size: clamp(0.7rem, 2vw, 0.9rem);
+      font-size: clamp(0.7rem, 2vw, 0.85rem);
     }
     .calendar-table td.other-month {
       background: #fafaf7;
@@ -182,7 +211,7 @@
     }
     .day-number {
       font-weight: 700;
-      font-size: clamp(0.7rem, 2.2vw, 0.9rem);
+      font-size: clamp(0.7rem, 2.2vw, 0.85rem);
       color: #3e2c1c;
       margin-bottom: 2px;
       line-height: 1.2;
@@ -196,17 +225,17 @@
       display: flex;
       flex-direction: column;
       gap: 1px;
-      font-size: clamp(0.5rem, 1.6vw, 0.62rem);
+      font-size: clamp(0.45rem, 1.4vw, 0.6rem);
     }
     .subject-line {
       display: flex;
       align-items: center;
       gap: 2px;
-      min-height: 16px;
+      min-height: 14px;
     }
     .subject-line input[type="checkbox"] {
-      width: 11px;
-      height: 11px;
+      width: 10px;
+      height: 10px;
       accent-color: #b5835a;
       cursor: pointer;
       flex-shrink: 0;
@@ -215,26 +244,28 @@
     .subject-label {
       display: flex;
       align-items: center;
-      gap: 1px;
+      gap: 2px;
       color: #3f3326;
       font-weight: 500;
       font-size: inherit;
       cursor: pointer;
       line-height: 1.2;
       white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    }
+    .subject-section-title {
+      font-size: 0.45rem;
+      font-weight: 700;
+      color: #b5835a;
+      margin-top: 3px;
+      margin-bottom: 1px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
     }
     .penalty-note {
-      font-size: 0.5rem;
+      font-size: 0.45rem;
       color: #b45f3a;
       font-weight: 700;
     }
-    .minutes-note {
-      font-size: 0.45rem;
-      color: #8b7358;
-    }
-    /* Кнопки */
     .print-btn-container {
       display: flex;
       justify-content: flex-end;
@@ -250,11 +281,11 @@
       font-weight: 600;
       color: #4a3421;
       cursor: pointer;
-      font-size: clamp(0.7rem, 2vw, 0.9rem);
+      font-size: clamp(0.7rem, 2vw, 0.85rem);
       display: flex;
       align-items: center;
       gap: 4px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
       -webkit-tap-highlight-color: transparent;
       white-space: nowrap;
     }
@@ -272,7 +303,7 @@
       color: #5d3c25;
     }
     .note-print {
-      font-size: clamp(0.6rem, 1.8vw, 0.75rem);
+      font-size: clamp(0.6rem, 1.8vw, 0.7rem);
       color: #8f725b;
       margin-top: 8px;
       text-align: right;
@@ -281,14 +312,13 @@
     #backupFileInput {
       display: none;
     }
-    /* Адаптив для очень маленьких экранов */
     @media (max-width: 400px) {
       .calendar-wrapper {
         padding: 10px 6px 14px;
         border-radius: 16px;
       }
       .legend {
-        gap: 4px 8px;
+        gap: 3px 6px;
         padding: 6px 8px;
       }
       .print-btn-container {
@@ -300,7 +330,6 @@
         font-size: 0.65rem;
       }
     }
-    /* Печать */
     @media print {
       body {
         background: white;
@@ -312,14 +341,16 @@
         padding: 10px;
         max-width: 100%;
       }
-      .btn, .print-btn-container, .sync-badge {
+      .btn,
+      .print-btn-container,
+      .sync-badge {
         display: none;
       }
       .calendar-table {
         min-width: auto;
       }
       .calendar-table td {
-        height: 75px;
+        height: 95px;
       }
       .table-container {
         overflow-x: visible;
@@ -341,13 +372,21 @@
       </div>
     </div>
     <div class="legend">
-      <div class="legend-item"><span class="subject-dot dot-math"></span> Матем.</div>
-      <div class="legend-item"><span class="subject-dot dot-reading"></span> Чтение</div>
-      <div class="legend-item"><span class="subject-dot dot-russian"></span> Русский</div>
-      <div class="legend-item"><span class="subject-dot dot-music1"></span> Музыка</div>
-      <div class="legend-item"><span class="subject-dot dot-music2"></span> Сольф.</div>
-      <div class="legend-item" style="margin-left:auto;">✅</div>
-      <div class="legend-item">📌 x2 (макс.60′)</div>
+      <span style="font-weight:700;">Ежедн.:</span>
+      <div class="legend-item"><span class="subject-dot dot-math"></span>Матем.</div>
+      <div class="legend-item"><span class="subject-dot dot-russian"></span>Русский</div>
+      <div class="legend-item"><span class="subject-dot dot-reading"></span>Чтение</div>
+      <div class="legend-item"><span class="subject-dot dot-mult"></span>Умнож.</div>
+      <div class="legend-item"><span class="subject-dot dot-piano"></span>Форт.</div>
+      <div class="legend-item"><span class="subject-dot dot-logic"></span>Логика</div>
+      <span class="legend-separator"></span>
+      <span style="font-weight:700;">1р/нед:</span>
+      <div class="legend-item"><span class="subject-dot dot-project"></span>Проект</div>
+      <div class="legend-item"><span class="subject-dot dot-essay"></span>Соч.</div>
+      <div class="legend-item"><span class="subject-dot dot-poem"></span>Стихи</div>
+      <div class="legend-item"><span class="subject-dot dot-nature"></span>Окр.мир</div>
+      <span style="margin-left:auto;">✅</span>
+      <span>📌 x2 (60′)</span>
     </div>
     <div class="table-container">
       <table class="calendar-table">
@@ -365,27 +404,41 @@
       <button class="btn btn-primary" id="printBtn">🖨️</button>
     </div>
     <div class="note-print">
-      💡 Пропуск → x2 (макс. 60′) | ☁️ Supabase | 💾 Бэкап | 27 мая – 31 авг
+      💡 Ежедн.: Матем, Русский, Чтение, Умнож, Форт, Логика | 1р/нед: Пн-Проект, Вт-Соч, Ср-Стихи, Чт-Окр.мир
     </div>
   </div>
 
   <script>
     (function() {
+      // ========== НАСТРОЙКИ SUPABASE ==========
       const SUPABASE_URL = 'https://uutbolviysvdcveuocrs.supabase.co';
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1dGJvbHZpeXN2ZGN2ZXVvY3JzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4ODE3MzgsImV4cCI6MjA5NTQ1NzczOH0.H3DmFOXwhcmca4YBtDHOd7z_ENQ42KqUgdI8phJiqGQ';
+      // ========================================
 
       const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-      const SUBJECTS = [
-        { id: 'math', label: 'М', full: 'Математика', color: 'dot-math', base: 15 },
-        { id: 'reading', label: 'Ч', full: 'Чтение', color: 'dot-reading', base: 15 },
-        { id: 'russian', label: 'Р', full: 'Русский', color: 'dot-russian', base: 15 },
-        { id: 'music1', label: 'Муз', full: 'Музыка', color: 'dot-music1', base: 15 },
-        { id: 'music2', label: 'Сол', full: 'Сольфеджио', color: 'dot-music2', base: 15 }
+      // Ежедневные предметы
+      const DAILY_SUBJECTS = [
+        { id: 'math', label: 'Матем.', full: 'Математика', color: 'dot-math', base: 15 },
+        { id: 'russian', label: 'Русский', full: 'Русский язык', color: 'dot-russian', base: 15 },
+        { id: 'reading', label: 'Чтение', full: 'Чтение', color: 'dot-reading', base: 15 },
+        { id: 'mult', label: 'Умнож.', full: 'Умножения', color: 'dot-mult', base: 15 },
+        { id: 'piano', label: 'Форт.', full: 'Фортепиано', color: 'dot-piano', base: 15 },
+        { id: 'logic', label: 'Логика', full: 'Логика', color: 'dot-logic', base: 15 }
+      ];
+
+      // Еженедельные предметы (привязаны к дню недели: 1=пн, 2=вт, ...)
+      const WEEKLY_SUBJECTS = [
+        { id: 'project', label: 'Проект', full: 'Мини-проект', color: 'dot-project', base: 30, weekday: 1 },
+        { id: 'essay', label: 'Соч.', full: 'Сочинение', color: 'dot-essay', base: 30, weekday: 2 },
+        { id: 'poem', label: 'Стихи', full: 'Стихи', color: 'dot-poem', base: 30, weekday: 3 },
+        { id: 'nature', label: 'Окр.мир', full: 'Окружающий мир', color: 'dot-nature', base: 30, weekday: 4 }
       ];
 
       const MAX_MINUTES = 60;
-      const MONTH_NAMES = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+      const MONTH_NAMES = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь',
+        'Ноябрь', 'Декабрь'
+      ];
 
       const START_DATE = new Date(2026, 4, 27);
       const END_DATE = new Date(2026, 7, 31);
@@ -398,12 +451,28 @@
       function formatDateKey(y, m, d) {
         return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
       }
+
       function isWeekend(y, m, d) {
         return new Date(y, m, d).getDay() % 6 === 0;
       }
+
       function isInRange(y, m, d) {
         const date = new Date(y, m, d);
         return date >= START_DATE && date <= END_DATE;
+      }
+
+      function getDayOfWeek(y, m, d) {
+        let dow = new Date(y, m, d).getDay();
+        return dow === 0 ? 7 : dow; // пн=1, ..., вс=7
+      }
+
+      // Получить список предметов для конкретного дня
+      function getSubjectsForDay(y, m, d) {
+        const dow = getDayOfWeek(y, m, d);
+        let subjects = [...DAILY_SUBJECTS];
+        const weekly = WEEKLY_SUBJECTS.find(s => s.weekday === dow);
+        if (weekly) subjects.push(weekly);
+        return subjects;
       }
 
       async function loadMarksFromDB() {
@@ -467,16 +536,20 @@
       function getSubjectMultiplier(year, month, day, subjectId) {
         let prev = new Date(year, month, day);
         prev.setDate(prev.getDate() - 1);
-        let mult = 1, limit = 0;
+        let mult = 1,
+          limit = 0;
         while (limit < 120) {
-          const py = prev.getFullYear(), pm = prev.getMonth(), pd = prev.getDate();
+          const py = prev.getFullYear(),
+            pm = prev.getMonth(),
+            pd = prev.getDate();
           if (prev < START_DATE) return 1;
           if (!isWeekend(py, pm, pd) && isInRange(py, pm, pd)) {
             const key = formatDateKey(py, pm, pd);
             const wasDone = (marksCache[key] || {})[subjectId] === true;
             if (!wasDone) {
               mult = getSubjectMultiplier(py, pm, pd, subjectId) * 2;
-              const maxMult = Math.floor(MAX_MINUTES / SUBJECTS.find(s => s.id === subjectId).base);
+              const subj = [...DAILY_SUBJECTS, ...WEEKLY_SUBJECTS].find(s => s.id === subjectId);
+              const maxMult = Math.floor(MAX_MINUTES / (subj ? subj.base : 15));
               if (mult > maxMult) mult = maxMult;
             } else { mult = 1; }
             break;
@@ -496,7 +569,8 @@
         const firstDay = new Date(currentYear, currentMonth, 1).getDay();
         let offset = firstDay === 0 ? 6 : firstDay - 1;
         const days = new Date(currentYear, currentMonth + 1, 0).getDate();
-        let html = '', d = 1;
+        let html = '',
+          d = 1;
 
         for (let r = 0; r < 6; r++) {
           html += '<tr>';
@@ -512,21 +586,48 @@
               if (!inRange) {
                 html += '<td class="other-month"></td>';
               } else if (weekend) {
-                html += `<td class="weekend-col"><div class="day-number">${day}</div><div class="weekend-text">вых</div></td>`;
+                html +=
+                  `<td class="weekend-col"><div class="day-number">${day}</div><div class="weekend-text">🌿 выходной</div></td>`;
               } else {
                 const dayMarks = marksCache[dk] || {};
-                html += `<td><div class="day-cell"><div class="day-number">${day}</div><div class="subjects-checkboxes">`;
-                SUBJECTS.forEach(sub => {
-                  const checked = dayMarks[sub.id] === true;
-                  let mult = getSubjectMultiplier(currentYear, currentMonth, day, sub.id);
-                  const maxMult = Math.floor(MAX_MINUTES / sub.base);
-                  if (mult > maxMult) mult = maxMult;
-                  const penalty = mult > 1 ? `<span class="penalty-note">×${mult}</span>` : '';
-                  html += `<div class="subject-line" title="${sub.full}: ${sub.base*mult}′">
-                    <input type="checkbox" data-date="${dk}" data-subject="${sub.id}" ${checked?'checked':''}>
-                    <span class="subject-label"><span class="subject-dot ${sub.color}"></span>${sub.label}${penalty}</span>
-                  </div>`;
-                });
+                const subjects = getSubjectsForDay(currentYear, currentMonth, day);
+                const dailySubs = subjects.filter(s => DAILY_SUBJECTS.some(ds => ds.id === s.id));
+                const weeklySubs = subjects.filter(s => WEEKLY_SUBJECTS.some(ws => ws.id === s.id));
+
+                html +=
+                  `<td><div class="day-cell"><div class="day-number">${day}</div><div class="subjects-checkboxes">`;
+
+                // Ежедневные
+                if (dailySubs.length > 0) {
+                  html += `<div class="subject-section-title">📋 Ежедневно</div>`;
+                  dailySubs.forEach(sub => {
+                    const checked = dayMarks[sub.id] === true;
+                    let mult = getSubjectMultiplier(currentYear, currentMonth, day, sub.id);
+                    const maxMult = Math.floor(MAX_MINUTES / sub.base);
+                    if (mult > maxMult) mult = maxMult;
+                    const penalty = mult > 1 ? `<span class="penalty-note">×${mult}</span>` :
+                      '';
+                    html += `<div class="subject-line" title="${sub.full}: ${sub.base*mult}′">
+                      <input type="checkbox" data-date="${dk}" data-subject="${sub.id}" ${checked?'checked':''}>
+                      <span class="subject-label"><span class="subject-dot ${sub.color}"></span>${sub.label}${penalty}</span>
+                    </div>`;
+                  });
+                }
+
+                // Еженедельные
+                if (weeklySubs.length > 0) {
+                  html += `<div class="subject-section-title">📌 На неделе</div>`;
+                  weeklySubs.forEach(sub => {
+                    const checked = dayMarks[sub.id] === true;
+                    let mult = 1; // еженедельные не удваиваются
+                    const penalty = '';
+                    html += `<div class="subject-line" title="${sub.full}: ${sub.base}′">
+                      <input type="checkbox" data-date="${dk}" data-subject="${sub.id}" ${checked?'checked':''}>
+                      <span class="subject-label"><span class="subject-dot ${sub.color}"></span>${sub.label}${penalty}</span>
+                    </div>`;
+                  });
+                }
+
                 html += '</div></div></td>';
               }
               d++;
@@ -539,7 +640,8 @@
 
         tbody.querySelectorAll('input[type="checkbox"]').forEach(cb => {
           cb.addEventListener('change', async function() {
-            const dk = this.dataset.date, sid = this.dataset.subject;
+            const dk = this.dataset.date,
+              sid = this.dataset.subject;
             if (!marksCache[dk]) marksCache[dk] = {};
             marksCache[dk][sid] = this.checked;
             await saveMark(dk, sid, this.checked);
@@ -561,11 +663,13 @@
         document.getElementById('prevMonthBtn').addEventListener('click', () => changeMonth(-1));
         document.getElementById('nextMonthBtn').addEventListener('click', () => changeMonth(1));
         document.getElementById('resetAllBtn').addEventListener('click', async () => {
-          if (confirm('Удалить все отметки?')) { await resetAllMarksInDB(); renderCalendar(); }
+          if (confirm('Удалить все отметки?')) { await resetAllMarksInDB();
+            renderCalendar(); }
         });
         document.getElementById('printBtn').addEventListener('click', () => window.print());
         document.getElementById('downloadBackupBtn').addEventListener('click', downloadBackup);
-        document.getElementById('uploadBackupBtn').addEventListener('click', () => document.getElementById('backupFileInput').click());
+        document.getElementById('uploadBackupBtn').addEventListener('click', () => document.getElementById(
+          'backupFileInput').click());
         document.getElementById('backupFileInput').addEventListener('change', e => {
           if (e.target.files[0]) uploadBackup(e.target.files[0]);
         });
