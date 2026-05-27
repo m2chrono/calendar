@@ -3,25 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>📅 Календарь Алисы | с 28 мая 2026</title>
+  <title>📅 Календарь Алисы | 27 мая – 31 августа 2026</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+  </script>
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-
     body {
       background: #f5efe8;
-      font-family: 'Segoe UI', 'Quicksand', 'Comic Sans MS', 'Arial Rounded', system-ui, sans-serif;
+      font-family: 'Segoe UI', 'Quicksand', system-ui, sans-serif;
       display: flex;
       justify-content: center;
       align-items: flex-start;
       padding: 20px;
       min-height: 100vh;
-      margin: 0;
     }
-
     .calendar-wrapper {
       max-width: 1050px;
       width: 100%;
@@ -31,7 +30,6 @@
       padding: 25px 25px 30px;
       border: 1px solid #edd9c6;
     }
-
     .calendar-header {
       display: flex;
       justify-content: space-between;
@@ -40,9 +38,8 @@
       flex-wrap: wrap;
       gap: 15px;
     }
-
     .title-section h1 {
-      font-size: 2.3rem;
+      font-size: 2rem;
       font-weight: 600;
       color: #4f3822;
       display: flex;
@@ -53,19 +50,59 @@
       background: #ffe0ce;
       padding: 4px 18px;
       border-radius: 40px;
-      font-size: 1.4rem;
+      font-size: 1.2rem;
       color: #5e3a24;
     }
-
-    .date-range {
-      font-size: 1.2rem;
+    .sync-badge {
+      font-size: 0.75rem;
+      background: #e8f5e9;
+      color: #2e7d32;
+      padding: 4px 12px;
+      border-radius: 14px;
       font-weight: 600;
-      color: #4f3822;
-      background: #f7e9dd;
-      padding: 8px 20px;
-      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
-
+    .month-nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #f7e9dd;
+      border-radius: 30px;
+      padding: 6px 12px;
+    }
+    .month-nav button {
+      background: white;
+      border: none;
+      font-size: 1.3rem;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-weight: bold;
+      color: #5d3c25;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .month-nav button:hover {
+      background: #edd7c0;
+    }
+    .month-nav button:disabled {
+      opacity: 0.4;
+      cursor: default;
+      background: #f0e0d0;
+    }
+    .month-nav .month-label {
+      font-size: 1.2rem;
+      font-weight: 650;
+      min-width: 140px;
+      text-align: center;
+      color: #37281a;
+    }
     .legend {
       display: flex;
       flex-wrap: wrap;
@@ -88,22 +125,30 @@
       border-radius: 4px;
       display: inline-block;
     }
-    .dot-math { background: #e5986c; }
-    .dot-reading { background: #7fa07a; }
-    .dot-russian { background: #b2956e; }
-    .dot-music1 { background: #c78bb3; }
-    .dot-music2 { background: #8b9dc3; }
-
+    .dot-math {
+      background: #e5986c;
+    }
+    .dot-reading {
+      background: #7fa07a;
+    }
+    .dot-russian {
+      background: #b2956e;
+    }
+    .dot-music1 {
+      background: #c78bb3;
+    }
+    .dot-music2 {
+      background: #8b9dc3;
+    }
     .calendar-table {
       width: 100%;
       border-collapse: collapse;
       background: white;
       border-radius: 24px;
       overflow: hidden;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
       table-layout: fixed;
     }
-
     .calendar-table th {
       background: #fae6d5;
       color: #4d3320;
@@ -113,16 +158,13 @@
       text-align: center;
       border: 1px solid #ecd9c2;
     }
-
     .calendar-table td {
       border: 1px solid #ecd9c2;
       vertical-align: top;
-      height: 105px;
+      height: 100px;
       padding: 6px 4px;
       background: #ffffff;
-      transition: background 0.1s;
     }
-
     .calendar-table td.weekend-col {
       background: #f9f2ea;
       color: #b8a494;
@@ -131,90 +173,71 @@
       font-weight: 500;
       font-size: 1rem;
     }
-
     .calendar-table td.other-month {
       background: #fafaf7;
       color: #c0b0a0;
     }
-
     .day-cell {
       display: flex;
       flex-direction: column;
       height: 100%;
     }
-
     .day-number {
       font-weight: 700;
       font-size: 0.95rem;
       color: #3e2c1c;
       margin-bottom: 4px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
     }
-
     .weekend-text {
       font-size: 0.85rem;
       color: #b1977e;
       font-weight: 500;
       margin-top: 4px;
     }
-
     .subjects-checkboxes {
       display: flex;
       flex-direction: column;
       gap: 2px;
       font-size: 0.65rem;
     }
-
     .subject-line {
       display: flex;
       align-items: center;
       gap: 3px;
-      justify-content: flex-start;
     }
-
     .subject-line input[type="checkbox"] {
       width: 12px;
       height: 12px;
       accent-color: #b5835a;
-      margin: 0;
-      flex-shrink: 0;
       cursor: pointer;
     }
-
     .subject-label {
       display: flex;
       align-items: center;
       gap: 2px;
       color: #3f3326;
       font-weight: 500;
-      white-space: nowrap;
       font-size: 0.62rem;
       cursor: pointer;
     }
-
     .penalty-note {
       font-size: 0.55rem;
       color: #b45f3a;
       font-weight: 700;
-      margin-left: 1px;
     }
-
     .minutes-note {
       font-size: 0.5rem;
       color: #8b7358;
       margin-left: 1px;
     }
-
     .print-btn-container {
       display: flex;
       justify-content: flex-end;
       margin-top: 20px;
       gap: 12px;
       flex-wrap: wrap;
+      align-items: center;
     }
-
     .btn {
       background: #fff2e7;
       border: 1px solid #d8b896;
@@ -227,28 +250,37 @@
       display: flex;
       align-items: center;
       gap: 6px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.04);
       transition: 0.2s;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.04);
     }
-
     .btn-primary {
       background: #dbb18c;
       border-color: #b2815b;
       color: #2d1e10;
     }
-
+    .btn-outline {
+      background: transparent;
+      border: 1px dashed #b2815b;
+      color: #5d3c25;
+    }
     .btn:hover {
       background: #fbe5d2;
     }
-
+    .btn-primary:hover {
+      background: #e7c3a2;
+    }
+    .btn-outline:hover {
+      background: #fdf0e4;
+    }
     .note-print {
       font-size: 0.8rem;
       color: #8f725b;
       margin-top: 10px;
       text-align: right;
-      line-height: 1.4;
     }
-
+    #backupFileInput {
+      display: none;
+    }
     @media print {
       body {
         background: white;
@@ -260,255 +292,332 @@
         padding: 15px;
         max-width: 100%;
       }
-      .btn, .print-btn-container {
+      .btn,
+      .print-btn-container {
         display: none;
       }
       .calendar-table td {
-        height: 90px;
-      }
-    }
-
-    @media (max-width: 650px) {
-      .calendar-table td {
-        height: auto;
-        min-height: 85px;
+        height: 85px;
       }
     }
   </style>
 </head>
 <body>
-<div class="calendar-wrapper" id="calendarApp">
-  <div class="calendar-header">
-    <div class="title-section">
-      <h1>
-        📘 Алиса
-        <span>трекер</span>
-      </h1>
+  <div class="calendar-wrapper" id="calendarApp">
+    <div class="calendar-header">
+      <div class="title-section">
+        <h1>📘 Алиса <span>2026</span></h1>
+      </div>
+      <div class="sync-badge" id="syncBadge">☁️ Загрузка...</div>
+      <div class="month-nav">
+        <button id="prevMonthBtn" title="Предыдущий месяц">←</button>
+        <div class="month-label" id="monthLabel">Май 2026</div>
+        <button id="nextMonthBtn" title="Следующий месяц">→</button>
+      </div>
     </div>
-    <div class="date-range" id="dateRangeDisplay">28 мая – 27 июня 2026</div>
+    <div class="legend">
+      <div class="legend-item"><span class="subject-dot dot-math"></span> Матем.</div>
+      <div class="legend-item"><span class="subject-dot dot-reading"></span> Чтение</div>
+      <div class="legend-item"><span class="subject-dot dot-russian"></span> Русский</div>
+      <div class="legend-item"><span class="subject-dot dot-music1"></span> Музыка</div>
+      <div class="legend-item"><span class="subject-dot dot-music2"></span> Сольфеджио</div>
+      <div class="legend-item" style="margin-left:auto;">✅ Сделано</div>
+      <div class="legend-item">📌 Пропуск → x2 (макс. 60 мин)</div>
+    </div>
+    <table class="calendar-table">
+      <thead>
+        <tr><th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th>Сб</th><th>Вс</th></tr>
+      </thead>
+      <tbody id="calendarBody"></tbody>
+    </table>
+    <div class="print-btn-container">
+      <button class="btn btn-outline" id="downloadBackupBtn">💾 Сохранить в файл</button>
+      <button class="btn btn-outline" id="uploadBackupBtn">📤 Загрузить из файла</button>
+      <input type="file" id="backupFileInput" accept=".json">
+      <button class="btn" id="resetAllBtn">🔄 Сбросить всё</button>
+      <button class="btn btn-primary" id="printBtn">🖨️ Распечатать</button>
+    </div>
+    <div class="note-print">
+      💡 Пропуск → завтра x2 (макс. 60 мин) &nbsp;|&nbsp; ☁️ Supabase &nbsp;|&nbsp; 💾 Бэкап в файл &nbsp;|&nbsp; 📅 27 мая – 31 авг
+    </div>
   </div>
 
-  <div class="legend">
-    <div class="legend-item"><span class="subject-dot dot-math"></span> Матем.</div>
-    <div class="legend-item"><span class="subject-dot dot-reading"></span> Чтение</div>
-    <div class="legend-item"><span class="subject-dot dot-russian"></span> Русский</div>
-    <div class="legend-item"><span class="subject-dot dot-music1"></span> Музыка</div>
-    <div class="legend-item"><span class="subject-dot dot-music2"></span> Сольфеджио</div>
-    <div class="legend-item" style="margin-left: auto;">✅ Галочка = сделано</div>
-    <div class="legend-item">📌 Пропуск → завтра x2 (макс. 60 мин)</div>
-  </div>
+  <script>
+    (function() {
+      // ========== НАСТРОЙКИ SUPABASE ==========
+      const SUPABASE_URL = 'https://uutbolviysvdcveuocrs.supabase.co';
+      const SUPABASE_KEY = 'ix3-yir-38j-Cmq';
+      // ========================================
 
-  <table class="calendar-table" id="calendarGrid">
-    <thead>
-      <tr>
-        <th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th>Сб</th><th>Вс</th>
-      </tr>
-    </thead>
-    <tbody id="calendarBody"></tbody>
-  </table>
+      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  <div class="print-btn-container">
-    <button class="btn" id="resetAllBtn">🔄 Сбросить все отметки</button>
-    <button class="btn btn-primary" id="printBtn">🖨️ Распечатать календарь</button>
-  </div>
-  <div class="note-print">
-    💡 <strong>Правило:</strong> если предмет не отмечен в будний день, на следующий учебный день его длительность удваивается (до 60 мин).<br>
-    ✏️ Сб и Вс — выходные, занятия не отображаются. Множитель в выходные не переносится.
-  </div>
-</div>
+      const SUBJECTS = [
+        { id: 'math', label: 'Матем.', full: 'Математика', color: 'dot-math', base: 15 },
+        { id: 'reading', label: 'Чтение', full: 'Чтение', color: 'dot-reading', base: 15 },
+        { id: 'russian', label: 'Русский', full: 'Русский язык', color: 'dot-russian', base: 15 },
+        { id: 'music1', label: 'Музыка', full: 'Музыка', color: 'dot-music1', base: 15 },
+        { id: 'music2', label: 'Сольфеджио', full: 'Сольфеджио', color: 'dot-music2', base: 15 }
+      ];
 
-<script>
-  (function() {
-    const SUBJECTS = [
-      { id: 'math',    label: 'Матем.',     full: 'Математика',  color: 'dot-math',    base: 15 },
-      { id: 'reading', label: 'Чтение',     full: 'Чтение',      color: 'dot-reading', base: 15 },
-      { id: 'russian', label: 'Русский',    full: 'Русский язык', color: 'dot-russian', base: 15 },
-      { id: 'music1',  label: 'Музыка',     full: 'Музыка',      color: 'dot-music1',  base: 15 },
-      { id: 'music2',  label: 'Сольфеджио', full: 'Сольфеджио',  color: 'dot-music2',  base: 15 }
-    ];
+      const MAX_MINUTES = 60;
+      const MONTH_NAMES = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь',
+        'Ноябрь', 'Декабрь'
+      ];
 
-    const MAX_MINUTES = 60;
-    const STORAGE_KEY = 'alisa_calendar_max60_no_weekend_marks';
+      // Начало и конец диапазона
+      const START_DATE = new Date(2026, 4, 27); // 27 мая 2026
+      const END_DATE = new Date(2026, 7, 31); // 31 августа 2026
 
-    const START_DATE = new Date(2026, 4, 28);
-    const END_DATE = new Date(2026, 5, 27);
+      // Текущий месяц (по умолчанию – май)
+      let currentMonth = 4; // Май 2026 (0-11)
+      const currentYear = 2026;
+      const MIN_MONTH = 4; // Май
+      const MAX_MONTH = 7; // Август
 
-    function loadMarks() {
-      try {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        return saved ? JSON.parse(saved) : {};
-      } catch (e) {
-        return {};
+      let marksCache = {};
+
+      function formatDateKey(year, month, day) {
+        const m = String(month + 1).padStart(2, '0');
+        const d = String(day).padStart(2, '0');
+        return `${year}-${m}-${d}`;
       }
-    }
 
-    function saveMarks(marks) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(marks));
-    }
+      function isWeekend(year, month, day) {
+        const dow = new Date(year, month, day).getDay();
+        return dow === 0 || dow === 6;
+      }
 
-    function formatDateKey(year, month, day) {
-      const m = String(month + 1).padStart(2, '0');
-      const d = String(day).padStart(2, '0');
-      return `${year}-${m}-${d}`;
-    }
+      // Проверка, входит ли дата в диапазон
+      function isInRange(year, month, day) {
+        const date = new Date(year, month, day);
+        return date >= START_DATE && date <= END_DATE;
+      }
 
-    function isWeekend(year, month, day) {
-      const dow = new Date(year, month, day).getDay();
-      return dow === 0 || dow === 6;
-    }
-
-    function getSubjectMultiplier(year, month, day, subjectId, marks) {
-      let prevDate = new Date(year, month, day);
-      prevDate.setDate(prevDate.getDate() - 1);
-      let multiplier = 1;
-      let limit = 0;
-
-      while (limit < 60) {
-        const pYear = prevDate.getFullYear();
-        const pMonth = prevDate.getMonth();
-        const pDay = prevDate.getDate();
-
-        if (prevDate < START_DATE) {
-          return 1;
+      // ========== SUPABASE ==========
+      async function loadMarksFromDB() {
+        const { data, error } = await supabase.from('marks').select('*');
+        if (error) {
+          console.error('Ошибка загрузки:', error);
+          document.getElementById('syncBadge').textContent = '⚠️ Ошибка';
+          return;
         }
-
-        if (!isWeekend(pYear, pMonth, pDay)) {
-          const key = formatDateKey(pYear, pMonth, pDay);
-          const dayData = marks[key] || {};
-          const wasDone = dayData[subjectId] === true;
-
-          if (!wasDone) {
-            const prevMult = getSubjectMultiplier(pYear, pMonth, pDay, subjectId, marks);
-            multiplier = prevMult * 2;
-            // ограничение: если база * множитель > 60, то множитель фиксируем на 60/база
-            const maxMult = Math.floor(MAX_MINUTES / SUBJECTS.find(s => s.id === subjectId).base);
-            if (multiplier > maxMult) {
-              multiplier = maxMult;
-            }
-          } else {
-            multiplier = 1;
-          }
-          break;
-        }
-        prevDate.setDate(prevDate.getDate() - 1);
-        limit++;
-      }
-      return multiplier;
-    }
-
-    function renderCalendar() {
-      const marks = loadMarks();
-      const tbody = document.getElementById('calendarBody');
-      if (!tbody) return;
-
-      const startDay = START_DATE.getDay();
-      let startOffset = (startDay === 0) ? 6 : startDay - 1;
-
-      const allDays = [];
-      let current = new Date(START_DATE);
-      while (current <= END_DATE) {
-        allDays.push(new Date(current));
-        current.setDate(current.getDate() + 1);
-      }
-
-      let html = '';
-      let dayIndex = 0;
-      const totalDays = allDays.length;
-
-      for (let row = 0; row < 7; row++) {
-        html += '<tr>';
-        for (let col = 0; col < 7; col++) {
-          if (row === 0 && col < startOffset) {
-            html += '<td class="other-month"></td>';
-          } else if (dayIndex >= totalDays) {
-            html += '<td class="other-month"></td>';
-          } else {
-            const date = allDays[dayIndex];
-            const year = date.getFullYear();
-            const month = date.getMonth();
-            const day = date.getDate();
-            const weekend = isWeekend(year, month, day);
-            const dateKey = formatDateKey(year, month, day);
-
-            if (weekend) {
-              html += `<td class="weekend-col">`;
-              html += `<div class="day-number">${day}</div>`;
-              html += `<div class="weekend-text">🌿 выходной</div>`;
-              html += `</td>`;
-            } else {
-              const dayMarks = marks[dateKey] || {};
-              html += `<td>`;
-              html += `<div class="day-cell">`;
-              html += `<div class="day-number">${day}</div>`;
-              html += `<div class="subjects-checkboxes">`;
-
-              SUBJECTS.forEach(sub => {
-                const checked = dayMarks[sub.id] === true;
-                const checkedAttr = checked ? 'checked' : '';
-                let mult = getSubjectMultiplier(year, month, day, sub.id, marks);
-                const maxMult = Math.floor(MAX_MINUTES / sub.base);
-                if (mult > maxMult) mult = maxMult;
-                const minutes = sub.base * mult;
-                const penaltyText = (mult > 1) ? `×${mult}` : '';
-
-                html += `
-                  <div class="subject-line" title="${sub.full}: ${minutes} мин">
-                    <input type="checkbox" id="chk_${dateKey}_${sub.id}" 
-                           data-date="${dateKey}" data-subject="${sub.id}" ${checkedAttr}>
-                    <label for="chk_${dateKey}_${sub.id}" class="subject-label">
-                      <span class="subject-dot ${sub.color}" style="width:8px;height:8px;border-radius:2px;"></span>
-                      ${sub.label}
-                      ${penaltyText ? `<span class="penalty-note">${penaltyText}</span>` : ''}
-                      <span class="minutes-note">${minutes}′</span>
-                    </label>
-                  </div>`;
-              });
-
-              html += `</div></div></td>`;
-            }
-            dayIndex++;
-          }
-        }
-        html += '</tr>';
-        if (dayIndex >= totalDays) break;
-      }
-
-      tbody.innerHTML = html;
-
-      document.querySelectorAll('#calendarBody input[type="checkbox"]').forEach(cb => {
-        cb.addEventListener('change', function(e) {
-          const dateKey = this.dataset.date;
-          const subjectId = this.dataset.subject;
-          if (!dateKey || !subjectId) return;
-
-          let marks = loadMarks();
-          if (!marks[dateKey]) marks[dateKey] = {};
-          marks[dateKey][subjectId] = this.checked;
-          saveMarks(marks);
-          renderCalendar();
+        marksCache = {};
+        data.forEach(row => {
+          const key = row.date_key;
+          if (!marksCache[key]) marksCache[key] = {};
+          marksCache[key][row.subject_id] = row.done;
         });
-      });
-    }
+        document.getElementById('syncBadge').textContent = '☁️ Синхр.';
+      }
 
-    function resetAllMarks() {
-      if (confirm('Удалить ВСЕ отметки в этом календаре? Это действие необратимо.')) {
-        saveMarks({});
+      async function saveMark(dateKey, subjectId, done) {
+        const { error } = await supabase.from('marks').upsert({
+          date_key: dateKey,
+          subject_id: subjectId,
+          done: done
+        }, { onConflict: 'date_key, subject_id' });
+        if (error) {
+          console.error('Ошибка сохранения:', error);
+          document.getElementById('syncBadge').textContent = '⚠️ Ошибка';
+        } else {
+          document.getElementById('syncBadge').textContent = '☁️ Сохранено';
+        }
+      }
+
+      async function resetAllMarksInDB() {
+        const { error } = await supabase.from('marks').delete().neq('id', 0);
+        if (error) {
+          console.error('Ошибка сброса:', error);
+          return false;
+        }
+        marksCache = {};
+        return true;
+      }
+
+      // ========== БЭКАП ==========
+      function downloadBackup() {
+        const blob = new Blob([JSON.stringify(marksCache, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        const now = new Date();
+        const filename =
+          `alisa-backup-${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}.json`;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        document.getElementById('syncBadge').textContent = '💾 Файл сохранён';
+        setTimeout(() => { document.getElementById('syncBadge').textContent = '☁️ Синхр.'; }, 2000);
+      }
+
+      async function uploadBackup(file) {
+        try {
+          const text = await file.text();
+          const data = JSON.parse(text);
+          if (typeof data !== 'object') throw new Error('Неверный формат');
+          const rows = [];
+          for (const [dateKey, subjects] of Object.entries(data)) {
+            for (const [subjectId, done] of Object.entries(subjects)) {
+              rows.push({ date_key: dateKey, subject_id: subjectId, done: !!done });
+            }
+          }
+          if (rows.length === 0) { alert('Файл пуст или имеет неверный формат.'); return; }
+          await supabase.from('marks').delete().neq('id', 0);
+          const { error } = await supabase.from('marks').insert(rows);
+          if (error) throw error;
+          marksCache = data;
+          document.getElementById('syncBadge').textContent = '📤 Загружено';
+          setTimeout(() => { document.getElementById('syncBadge').textContent = '☁️ Синхр.'; }, 2000);
+          renderCalendar();
+        } catch (e) {
+          alert('Ошибка загрузки файла: ' + e.message);
+          document.getElementById('syncBadge').textContent = '⚠️ Ошибка файла';
+        }
+      }
+
+      // ========== МНОЖИТЕЛЬ ==========
+      function getSubjectMultiplier(year, month, day, subjectId) {
+        let prevDate = new Date(year, month, day);
+        prevDate.setDate(prevDate.getDate() - 1);
+        let multiplier = 1;
+        let limit = 0;
+
+        while (limit < 120) {
+          const pYear = prevDate.getFullYear();
+          const pMonth = prevDate.getMonth();
+          const pDay = prevDate.getDate();
+          if (prevDate < START_DATE) return 1;
+          if (!isWeekend(pYear, pMonth, pDay) && isInRange(pYear, pMonth, pDay)) {
+            const key = formatDateKey(pYear, pMonth, pDay);
+            const dayData = marksCache[key] || {};
+            const wasDone = dayData[subjectId] === true;
+            if (!wasDone) {
+              const prevMult = getSubjectMultiplier(pYear, pMonth, pDay, subjectId);
+              multiplier = prevMult * 2;
+              const maxMult = Math.floor(MAX_MINUTES / SUBJECTS.find(s => s.id === subjectId).base);
+              if (multiplier > maxMult) multiplier = maxMult;
+            } else {
+              multiplier = 1;
+            }
+            break;
+          }
+          prevDate.setDate(prevDate.getDate() - 1);
+          limit++;
+        }
+        return multiplier;
+      }
+
+      // ========== ОТРИСОВКА ==========
+      function renderCalendar() {
+        const tbody = document.getElementById('calendarBody');
+        if (!tbody) return;
+
+        document.getElementById('monthLabel').textContent = MONTH_NAMES[currentMonth] + ' 2026';
+        document.getElementById('prevMonthBtn').disabled = (currentMonth <= MIN_MONTH);
+        document.getElementById('nextMonthBtn').disabled = (currentMonth >= MAX_MONTH);
+
+        const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+        let startOffset = (firstDay === 0) ? 6 : firstDay - 1;
+        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+        let html = '';
+        let dayCounter = 1;
+
+        for (let row = 0; row < 6; row++) {
+          html += '<tr>';
+          for (let col = 0; col < 7; col++) {
+            if (row === 0 && col < startOffset) {
+              html += '<td class="other-month"></td>';
+            } else if (dayCounter > daysInMonth) {
+              html += '<td class="other-month"></td>';
+            } else {
+              const day = dayCounter;
+              const inRange = isInRange(currentYear, currentMonth, day);
+              const weekend = isWeekend(currentYear, currentMonth, day);
+              const dateKey = formatDateKey(currentYear, currentMonth, day);
+
+              if (!inRange) {
+                // Дата вне диапазона (до 27 мая или после 31 августа)
+                html += '<td class="other-month"></td>';
+              } else if (weekend) {
+                html +=
+                  `<td class="weekend-col"><div class="day-number">${day}</div><div class="weekend-text">🌿 выходной</div></td>`;
+              } else {
+                const dayMarks = marksCache[dateKey] || {};
+                html +=
+                  `<td><div class="day-cell"><div class="day-number">${day}</div><div class="subjects-checkboxes">`;
+                SUBJECTS.forEach(sub => {
+                  const checked = dayMarks[sub.id] === true;
+                  let mult = getSubjectMultiplier(currentYear, currentMonth, day, sub.id);
+                  const maxMult = Math.floor(MAX_MINUTES / sub.base);
+                  if (mult > maxMult) mult = maxMult;
+                  const minutes = sub.base * mult;
+                  const penaltyText = (mult > 1) ? `×${mult}` : '';
+                  html += `<div class="subject-line" title="${sub.full}: ${minutes} мин">
+                    <input type="checkbox" data-date="${dateKey}" data-subject="${sub.id}" ${checked ? 'checked' : ''}>
+                    <label class="subject-label"><span class="subject-dot ${sub.color}" style="width:8px;height:8px;border-radius:2px;"></span>${sub.label}${penaltyText ? `<span class="penalty-note">${penaltyText}</span>` : ''}<span class="minutes-note">${minutes}′</span></label>
+                  </div>`;
+                });
+                html += `</div></div></td>`;
+              }
+              dayCounter++;
+            }
+          }
+          html += '</tr>';
+          if (dayCounter > daysInMonth) break;
+        }
+        tbody.innerHTML = html;
+
+        tbody.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+          cb.addEventListener('change', async function() {
+            const dateKey = this.dataset.date;
+            const subjectId = this.dataset.subject;
+            if (!dateKey || !subjectId) return;
+            if (!marksCache[dateKey]) marksCache[dateKey] = {};
+            marksCache[dateKey][subjectId] = this.checked;
+            await saveMark(dateKey, subjectId, this.checked);
+            renderCalendar();
+          });
+        });
+      }
+
+      function changeMonth(delta) {
+        const newMonth = currentMonth + delta;
+        if (newMonth < MIN_MONTH || newMonth > MAX_MONTH) return;
+        currentMonth = newMonth;
         renderCalendar();
       }
-    }
 
-    function printCalendar() {
-      window.print();
-    }
+      async function init() {
+        document.getElementById('syncBadge').textContent = '☁️ Загрузка...';
+        await loadMarksFromDB();
+        renderCalendar();
 
-    function init() {
-      document.getElementById('resetAllBtn').addEventListener('click', resetAllMarks);
-      document.getElementById('printBtn').addEventListener('click', printCalendar);
-      renderCalendar();
-    }
+        document.getElementById('prevMonthBtn').addEventListener('click', () => changeMonth(-1));
+        document.getElementById('nextMonthBtn').addEventListener('click', () => changeMonth(1));
+        document.getElementById('resetAllBtn').addEventListener('click', async () => {
+          if (confirm('Удалить ВСЕ отметки? Действие необратимо.')) {
+            await resetAllMarksInDB();
+            document.getElementById('syncBadge').textContent = '☁️ Очищено';
+            renderCalendar();
+          }
+        });
+        document.getElementById('printBtn').addEventListener('click', () => window.print());
+        document.getElementById('downloadBackupBtn').addEventListener('click', downloadBackup);
+        document.getElementById('uploadBackupBtn').addEventListener('click', () => {
+          document.getElementById('backupFileInput').click();
+        });
+        document.getElementById('backupFileInput').addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          if (file) uploadBackup(file);
+          e.target.value = '';
+        });
+      }
 
-    window.addEventListener('DOMContentLoaded', init);
-  })();
-</script>
+      window.addEventListener('DOMContentLoaded', init);
+    })();
+  </script>
 </body>
 </html>
